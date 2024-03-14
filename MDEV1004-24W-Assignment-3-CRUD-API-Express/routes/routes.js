@@ -10,6 +10,7 @@ const express = require("express")
 const app = express();
 app.use(express.json());
 const middleware = require("../middleware/middleware")
+const auth = require("../middleware/authToken")
 const bookController = require("../controller/controller");
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
@@ -19,27 +20,27 @@ const router = express.Router();
 
 // API Endpoints to perform the CRUD operations
 // 1.API Endpoint to fetch all books 
-router.get('/getAllBooks', bookController.getAllBooks, middleware.logGetAllBooks);
+router.get('/getAllBooks', bookController.getAllBooks, auth);
 
 // 2.API Endpoint to fetch one specific book using ID
-router.get('/getBookByID/:id', bookController.getBookByID,middleware.logGetBookByID);
+router.get('/getBookByID/:id', bookController.getBookByID, auth);
 
 // 3.API Endpoint to create a new book  
-router.post('/createBook', bookController.createBook, middleware.logCreateNewBook);
+router.post('/createBook', bookController.createBook, auth);
 
 // 4.API Endpoint to update the book by ID
-router.put('/updateBook/:id', bookController.updateBook, middleware.logUpdateBookByID);
+router.put('/updateBook/:id', bookController.updateBook, auth);
 
 // 5.API Endpoint to delete a book using ID
-router.delete('/deleteBookByID/:id', bookController.deleteBookByID, middleware.logDeleteBook);
+router.delete('/deleteBookByID/:id', bookController.deleteBookByID, auth);
 
 //register
-router.post("/register", bookController.registerUser, middleware.logRegisterUser);
+router.post("/register", bookController.registerUser, auth);
 
 //login
-router.post("/login", bookController.loginUser,middleware.logLoginUser);
+router.post("/login", bookController.loginUser, auth);
 
 //welcome
-router.post("/welcome", bookController.welcomeUser, middleware.logWelcomeUser);
+router.post("/welcome", bookController.welcomeUser, auth);
 
 module.exports = router;
