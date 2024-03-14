@@ -45,7 +45,7 @@ async function syncModelWithCloud() {
     // Check if data already exists in database to avoid duplicate inserts
     const existingData = BookModel.find(); //await
   
-    if (existingData.length === undefined) {
+    if (existingData.length === 0) {
       // Insert example data only if no data exists
       await BookModel.create([
         { BooksName: 'The Hobbit', ISBN: '1112223334', Rating: 4.7, Author: 'J.R.R. Tolkien', Genre: 'Fantasy' },

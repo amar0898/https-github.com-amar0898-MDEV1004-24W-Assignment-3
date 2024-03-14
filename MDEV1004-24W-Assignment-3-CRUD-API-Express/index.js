@@ -13,9 +13,10 @@ const routes = require('./routes/routes.js'); // Importing book routes
 const cors=require('cors');
 const app = express();
 const http = require("http");
-
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
+
+app.use('/books', routes);
 
 app.listen(port, async ()=>{
     console.log(`server is running on port ${port}`)
