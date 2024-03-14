@@ -6,17 +6,15 @@
  */
 
 require('dotenv').config();
-const mongoose = require("mongoose")
+const mongoDB = require("mongoose")
 const { MONGO_URI } = process.env;
 
-exports.connect=()=>(
-    mongoose.connect(MONGO_URI, {
-    })
-    .then(()=>{
-        console.log("Connected to mongoDB database successfully")
-    })
-    .catch((error)=>{
-        console.log("Conection failed")
-        console.log(error)
-    })
-)
+mongoDB.connect(MONGO_URI);
+const db = mongoDB.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Successfully connected to MongoDB database');
+});
+
+module.exports = { mongoDB, db };
