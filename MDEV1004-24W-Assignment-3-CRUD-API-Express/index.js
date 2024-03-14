@@ -16,7 +16,8 @@ const http = require("http");
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
 
-app.use('/books', routes);
+app.use(bodyParser.json());
+app.use('/', routes);
 
 app.listen(port, async ()=>{
     console.log(`server is running on port ${port}`)
