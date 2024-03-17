@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_dynamic_neutral40">
+    android:background="@color/app_dark_blue">
 
     <TextView
         android:id="@+id/loginLabel"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:text="Login"
+        android:text="Login JWT"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="28sp"
@@ -21,7 +21,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginLabel"
+        android:layout_below="@+id/loginLabel"
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="20dp"
         android:orientation="vertical">
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/app_input_field"
             android:hint="Email"
             android:inputType="text"
             android:textColor="@color/white"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/app_input_field"
             android:hint="Password"
             android:inputType="textPassword"
             android:textColor="@color/white"
@@ -53,11 +53,12 @@
 
         <Button
             android:id="@+id/registeredButton"
-            android:layout_width="121dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:background="@android:color/holo_green_dark"
+            android:background="@color/green"
+            android:backgroundTint="#8BC34A"
             android:onClick="loginClicked"
             android:text="Login" />
 
@@ -70,7 +71,7 @@
             android:layout_marginTop="15dp"
             android:onClick="registerNowClicked"
             android:text="Register Now"
-            android:textColor="#4CAF50" />
+            android:textColor="@color/red" />
 
     </LinearLayout>
 </RelativeLayout>
