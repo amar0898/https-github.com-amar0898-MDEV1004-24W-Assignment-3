@@ -1,3 +1,7 @@
+/*
+ * RegisterActivity.kt
+ * This activity allows users to register for a new account.
+ */
 package com.example.assignment3
 
 import android.content.DialogInterface
@@ -23,6 +27,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
     }
 
+    // Regular expression pattern for email validation
     val EMAIL_ADDRESS_PATTERN = Pattern.compile(
         "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
                 "\\@" +
@@ -33,9 +38,12 @@ class RegisterActivity : AppCompatActivity() {
                 ")+"
     )
 
+    // Function to validate email string
     fun isValidEmailString(str: String): Boolean{
         return EMAIL_ADDRESS_PATTERN.matcher(str).matches()
     }
+
+    // Function to handle register button click
     fun registerClicked(view: View){
         val firstnameText = findViewById<EditText>(R.id.firstnameEditText)
         val lastnameText = findViewById<EditText>(R.id.lastnameEditText)
@@ -44,6 +52,7 @@ class RegisterActivity : AppCompatActivity() {
         val confirmPasswordText = findViewById<EditText>(R.id.confirmPasswordEditText)
 
         if (emailText.text.isEmpty() || passwordText.text.isEmpty()){
+            // Alert dialog for empty fields
             val builder = AlertDialog.Builder(this@RegisterActivity)
             builder.setMessage("username, email or password cannot be empty")
             builder.setTitle("Registration Failed")
@@ -56,6 +65,7 @@ class RegisterActivity : AppCompatActivity() {
         }
         else if(!isValidEmailString(emailText.text.toString())){
 
+            // Alert dialog for invalid email
             val builder = AlertDialog.Builder(this@RegisterActivity)
             builder.setMessage("Invalid Email")
             builder.setTitle("Login Failed")
@@ -80,6 +90,7 @@ class RegisterActivity : AppCompatActivity() {
                     "password" to passwordText.text.toString()
                 )
                 val service = RetrofitClient.retrofit.create(ApiService::class.java)
+                //password validation
                 GlobalScope.launch {
                     //password validation
                     if(passwordText.text.toString() == confirmPasswordText.text.toString()){
@@ -94,7 +105,7 @@ class RegisterActivity : AppCompatActivity() {
                                 if (registerResponse != null) {
 
                                     Toast.makeText(this@RegisterActivity, "Registration Success", Toast.LENGTH_SHORT).show()
-                                    println("Registration Success")
+                                    println("Successfully registered!Please Login")
                                     finish()
 
 
@@ -121,7 +132,7 @@ class RegisterActivity : AppCompatActivity() {
                             override fun onFailure(call: Call<LoginRegisterResponse>, t: Throwable) {
                                 val builder = AlertDialog.Builder(this@RegisterActivity)
                                 builder.setMessage("unknown error, try again later")
-                                builder.setTitle("Registration Failed")
+                                builder.setTitle("Registration Failed.Try Again!")
                                 builder.setPositiveButton("OK",
                                     DialogInterface.OnClickListener { dialog: DialogInterface?, _: Int ->
                                         dialog?.cancel()
@@ -136,8 +147,9 @@ class RegisterActivity : AppCompatActivity() {
                     } else {
                         // alert password mismatch
                         val builder = AlertDialog.Builder(this@RegisterActivity)
-                        builder.setMessage("Passwords do not match.")
-                        builder.setTitle("Registration Failed")
+                        // alert password mismatch
+                        builder.setMessage("Passwords do not match.Try Again!")
+                        builder.setTitle("Registration Failed.Try Again!")
                         builder.setPositiveButton("OK",
                             DialogInterface.OnClickListener { dialog: DialogInterface?, _: Int ->
                                 dialog?.cancel()
@@ -166,6 +178,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
+    // Function to handle cancel button click
     fun cancelClicked(view: View) {
         finish()
     }

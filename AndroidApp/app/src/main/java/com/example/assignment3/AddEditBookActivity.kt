@@ -1,3 +1,13 @@
+/*
+ * AddEditBookActivity.kt - Activity for adding or editing a book
+ *
+ * This activity allows users to add a new book or edit an existing one. It receives book data
+ * from the intent and populates the UI accordingly. Users can input or modify book details such as
+ * title, ISBN, author, genres, and rating. When users click on the "Add" or "Update" button,
+ * the corresponding method is called to add or update the book via Retrofit API calls.
+ *
+ * Author: Yamuna Ravi Thalakatt,Amardeep Amardeep
+ */
 package com.example.assignment3
 
 import android.content.Context
@@ -18,6 +28,7 @@ import retrofit2.Response
 
 class AddEditBookActivity : AppCompatActivity() {
 
+    // UI elements
     private lateinit var titleText : EditText
     private lateinit var isbnText : EditText
     private lateinit var authorText : EditText
@@ -29,6 +40,7 @@ class AddEditBookActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit_book)
 
+        // Initialize UI elements and retrieve book data from intent
         var updateButton = findViewById<Button>(R.id.updateButton)
         var addEditText =  findViewById<TextView>(R.id.AddEditText)
         titleText = findViewById<EditText>(R.id.titleText)
@@ -37,16 +49,18 @@ class AddEditBookActivity : AppCompatActivity() {
         authorText = findViewById<EditText>(R.id.authorText)
         ratingText = findViewById<EditText>(R.id.ratingText)
 
-        //recevie book
+        // Receive book data from intent
         val jsonString = intent.getStringExtra("AddEditKey")
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val jsonAdapter = moshi.adapter<Book>(Book::class.java!!)
 
+        // Populate UI elements with book data if available
         if(!jsonString.isNullOrEmpty()){
             book = jsonAdapter.fromJson(jsonString)
         }
 
         if(book != null){
+            // If editing an existing book, set appropriate UI elements
             updateButton.text = "Update"
             addEditText.text = "Edit Book"
 
@@ -57,12 +71,14 @@ class AddEditBookActivity : AppCompatActivity() {
             authorText.setText(book?.author)
         }
         else{
+            // If adding a new book, set appropriate UI elements
             updateButton.text = "Add"
             addEditText.text = "Add Book"
         }
     }
 
 
+    // Function to handle click events on the "Add" or "Update" button
     fun addOrUpdateClicked(view: View) {
 
         val service = RetrofitClient.retrofit.create(ApiService::class.java)
@@ -92,10 +108,10 @@ class AddEditBookActivity : AppCompatActivity() {
                     Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if(response.isSuccessful){
-                            displayErrorMessage("book updated" , "Success")
+                            displayErrorMessage("Book details updated successfully" , "Success")
                         }
                         else{
-                            displayErrorMessage("book not updated" , "Failed")
+                            displayErrorMessage("Book details update failed" , "Failed")
 
                         }
                     }
@@ -125,10 +141,10 @@ class AddEditBookActivity : AppCompatActivity() {
                 service.addBook(authToken!!,bookData).enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if(response.isSuccessful){
-                            displayErrorMessage("book Added" , "Success")
+                            displayErrorMessage("Book Added Successfully" , "Success")
                         }
                         else{
-                            displayErrorMessage("book not Added" , "Fail")
+                            displayErrorMessage("Book Addition Failed" , "Fail")
                         }
                     }
 
@@ -147,6 +163,7 @@ class AddEditBookActivity : AppCompatActivity() {
     }
 
     private fun displayErrorMessage(message: String, title: String) {
+        // Build an alert dialog to display the error message
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(message)

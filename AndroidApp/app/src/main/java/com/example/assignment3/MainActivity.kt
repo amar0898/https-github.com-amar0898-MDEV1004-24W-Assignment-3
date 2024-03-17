@@ -1,3 +1,9 @@
+/*
+ * MainActivity.kt
+ * This activity displays a list of books fetched from an API.
+ * Users can add new books, edit existing ones, and log out.
+ * Author: Yamuna Ravi Thalakatt,Amardeep Amardeep
+ */
 package com.example.assignment3
 
 import android.content.Context
@@ -25,6 +31,7 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initialize RecyclerView
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -36,6 +43,7 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
         adapter = BookAdapter(emptyList())
         recyclerView.adapter = adapter
 
+        // Fetch books from the server
         fetchMovies()
 
     }
@@ -43,6 +51,7 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
     override fun onResume() {
         super.onResume()
 
+        // Refresh book list onResume
         fetchMovies()
 
     }
@@ -50,14 +59,11 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
 
     public fun fetchMovies() {
 
+        // Retrieve authentication token from SharedPreferences
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val authToken = sharedPreferences.getString("AuthToken", null)
 
         // Check if the authToken is not null before using it
-        /*if (authToken.isNullOrEmpty()) {
-            println("token null")
-            return
-        }*/
         val service = RetrofitClient.retrofit.create(ApiService::class.java)
         val call = service.getAllBooks(authToken!!)
 
@@ -69,6 +75,7 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
                         adapter = BookAdapter(movies)
                         recyclerView.adapter = adapter
 
+                        // Add swipe to delete functionality
                         val swipeToDeleteCallback = SwipeGesture(this@MainActivity, adapter)
                         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
                         itemTouchHelper.attachToRecyclerView(recyclerView)
@@ -76,7 +83,7 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
                         adapter.setOnItemClickListener(this@MainActivity)
 
                     } else {
-                        displayErrorMessage("No movies available.")
+                        displayErrorMessage("There are no movies available.")
                     }
                 } else {
                     displayErrorMessage("Error: ${response.code()}")
@@ -92,6 +99,7 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
     }
 
     private fun displayErrorMessage(message: String) {
+        // Display error message in an AlertDialog
         AlertDialog.Builder(this)
             .setTitle("Error")
             .setMessage(message)
@@ -100,13 +108,16 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
     }
 
     fun addMovieClicked(view: View) {
+        // Launch AddEditBookActivity to add a new book
         val i = Intent(this@MainActivity, AddEditBookActivity::class.java)
         startActivity(i);
     }
 
     override fun onItemClick(model: Book) {
+        // Launch AddEditBookActivity to edit the selected book
         val i = Intent(this@MainActivity, AddEditBookActivity::class.java)
 
+        // Serialize the book object to JSON and pass it as an extra to the activity
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val jsonAdapter = moshi.adapter<Book>(Book::class.java!!)
         val movie = jsonAdapter.toJson(model)
@@ -116,7 +127,7 @@ class MainActivity : AppCompatActivity(), BookAdapter.OnItemClickListener {
 
     fun logoutClicked(view: View) {
 
-        //clear auth token
+        // Clear authentication token and navigate to LoginActivity
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         sharedPreferences.edit().remove("AuthToken").apply()
 

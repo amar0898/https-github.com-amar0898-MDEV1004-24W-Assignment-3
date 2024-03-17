@@ -3,6 +3,9 @@ package com.example.assignment3
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * Data class representing the response from login and registration requests.
+ */
 @JsonClass(generateAdapter = true)
 data class LoginRegisterResponse(
     @Json(name = "_id") val id: String?,
@@ -17,6 +20,9 @@ data class ErrorResponse(
     @Json(name = "error") val error: String?
 )
 
+/**
+ * Data class representing a book.
+ */
 data class Book(
     @Json(name = "_id") val id: String?,
     @Json(name = "BooksName") val bookName: String?,

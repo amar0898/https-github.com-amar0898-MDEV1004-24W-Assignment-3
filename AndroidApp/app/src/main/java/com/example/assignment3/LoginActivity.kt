@@ -1,3 +1,9 @@
+/*
+ * LoginActivity.kt
+ * This activity allows users to log in to the application using their email and password.
+ * It performs validation on user input and communicates with the server to authenticate users.
+ * Author: Yamuna Ravi Thalakatt,Amardeep Amardeep
+ */
 package com.example.assignment3
 
 import android.content.Context
@@ -37,12 +43,14 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // Initialize EditText fields
         emailText = findViewById(R.id.emailLoginEditText)
         passwordText = findViewById(R.id.passwordEditText)
     }
 
     fun clearLoginEditText(){
 
+        // Clear EditText fields and request focus
         emailText.setText("")
         passwordText.setText("")
         emailText.requestFocus()
@@ -51,11 +59,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun isValidEmailString(str: String): Boolean{
+        // Validate email format using a regular expression
         return EMAIL_ADDRESS_PATTERN.matcher(str).matches()
     }
     fun loginClicked(view: View) {
         if(emailText.text.isEmpty() || passwordText.text.isEmpty()){
 
+            // Show alert if username or password is empty
             val builder = AlertDialog.Builder(this@LoginActivity)
             builder.setMessage("username and password are required")
             builder.setTitle("Login Failed")
@@ -64,7 +74,6 @@ class LoginActivity : AppCompatActivity() {
 
                     dialog?.cancel()
 
-                    //focus shift after alert is close
                     if(emailText.text.isEmpty()){
                         emailText.requestFocus()
                         val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -81,6 +90,7 @@ class LoginActivity : AppCompatActivity() {
         }
         else if(!isValidEmailString(emailText.text.toString())){
 
+            // Show alert if email format is invalid
             val builder = AlertDialog.Builder(this@LoginActivity)
             builder.setMessage("Invalid Email")
             builder.setTitle("Login Failed")
@@ -104,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
                     put("password", passwordText.text.toString())
                 }
 
-                //login process
+                // Perform login process
                 val service = RetrofitClient.retrofit.create(ApiService::class.java)
                 GlobalScope.launch {
                     service.loginUser(credentials).enqueue(object : Callback<LoginRegisterResponse> {
@@ -129,7 +139,7 @@ class LoginActivity : AppCompatActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
 
-                                    // Proceed to the next activity
+                                    // Proceed to next activity
                                     val i = Intent(this@LoginActivity, MainActivity::class.java)
                                     startActivity(i);
                                     clearLoginEditText()
@@ -172,6 +182,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
     fun registerNowClicked(view: View) {
+        // Navigate to RegisterActivity when Register Now is clicked
         val i = Intent(this@LoginActivity, RegisterActivity::class.java)
         startActivity(i);
         clearLoginEditText()

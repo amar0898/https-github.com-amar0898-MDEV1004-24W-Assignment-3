@@ -8,6 +8,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Adapter class for the RecyclerView displaying a list of books.
+ */
 class BookAdapter(private var books: List<Book>) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
